@@ -21,6 +21,7 @@ public class ResultEntity<T> {
 
     /**
      * 成功
+     *
      * @param data
      * @return
      */
@@ -30,6 +31,7 @@ public class ResultEntity<T> {
 
     /**
      * 成功
+     *
      * @param data
      * @param msg
      * @return
@@ -40,6 +42,7 @@ public class ResultEntity<T> {
 
     /**
      * 成功
+     *
      * @return
      */
     public static <T> ResultEntity success() {
@@ -48,6 +51,7 @@ public class ResultEntity<T> {
 
     /**
      * 失败
+     *
      * @param msg
      * @return
      */
@@ -57,6 +61,17 @@ public class ResultEntity<T> {
 
     /**
      * 失败
+     *
+     * @param data
+     * @return
+     */
+    public static <T> ResultEntity failure(String msg, Object data) {
+        return new ResultEntity(MessageCode.FAILURE, msg, msg);
+    }
+
+    /**
+     * 失败
+     *
      * @param e
      * @return
      */

@@ -15,6 +15,19 @@ public class MD5Utils {
         return DigestUtils.md5DigestAsHex(plainText.getBytes());
     }
 
+    /**
+     * 校验用户输入的密码与数据库密码做比对
+     * @param input
+     * @param dbPassword
+     * @return
+     */
+    public static Boolean checkPassword(String input, String dbPassword) {
+        String md5 = getMD5(input);
+        if (md5.equals(dbPassword)) {
+            return true;
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         String password = "";
