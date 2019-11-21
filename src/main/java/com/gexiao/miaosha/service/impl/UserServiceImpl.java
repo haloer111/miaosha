@@ -28,13 +28,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RedisOperate redisOperate;
 
     @Override
-    public User login(HttpServletResponse response, Long id, String password) {
+    public String login(HttpServletResponse response, Long id, String password) {
         User byId = getById(id);
         if (MD5Utils.checkPassword(password, byId.getPassword())) {
             String uuid = UUID.randomUUID().toString();
             //写入cookies
             addCookieAndRedis(uuid, response, byId);
-            return byId;
+            return uuid;
         }
 
         throw new BusinessException("密码错误");

@@ -17,7 +17,7 @@ public interface UserService extends IService<User> {
      * @param password
      * @return
      */
-    User login(HttpServletResponse response,Long id, String password);
+    String login(HttpServletResponse response, Long id, String password);
 
     /**
      * 根据token从redis中获取user信息

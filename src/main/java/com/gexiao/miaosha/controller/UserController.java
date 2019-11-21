@@ -5,6 +5,7 @@ import com.gexiao.miaosha.entity.User;
 import com.gexiao.miaosha.form.LoginForm;
 import com.gexiao.miaosha.service.UserService;
 import com.gexiao.miaosha.util.UserUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
  * @since : 2019/11/14 17:29
  */
 @Controller
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -32,16 +34,13 @@ public class UserController {
         model.addAttribute("user", UserUtils.get());
         return "hello";
     }
-    @GetMapping("/hello2")
-    public String hello2(Model model) {
-        model.addAttribute("user", UserUtils.get());
-        return "hello";
-    }
+
 
     @RequestMapping("/login")
-    public String login(HttpServletResponse response, @RequestParam Long id, @RequestParam String password) {
-        userService.login(response, id, password);
-        return "redirect:/hello";
+    @ResponseBody
+    public ResultEntity login(HttpServletResponse response, @RequestParam Long id, @RequestParam String password) {
+        String token = userService.login(response, id, password);
+        return ResultEntity.success(token);
     }
 
     @RequestMapping("/add")
@@ -49,6 +48,13 @@ public class UserController {
     public ResultEntity add(@RequestBody User user) {
         boolean save = userService.save(user);
         return ResultEntity.success(true);
+    }
+    @RequestMapping("/info")
+    @ResponseBody
+    public ResultEntity info() {
+        User user = UserUtils.get();
+        log.info("当前用户: {}", user);
+        return ResultEntity.success(user);
     }
 
 

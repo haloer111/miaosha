@@ -34,9 +34,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         Cookie[] cookies = request.getCookies();
         String paramToken = request.getParameter(TokenKey.TOKEN);
         String cookieToken = null;
-        for (Cookie cookie : cookies) {
-            if (StringUtils.equals(cookie.getName(), TokenKey.TOKEN)) {
-                cookieToken = cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (StringUtils.equals(cookie.getName(), TokenKey.TOKEN)) {
+                    cookieToken = cookie.getValue();
+                }
             }
         }
         String token = StringUtils.isBlank(paramToken) == true ? cookieToken : paramToken;
