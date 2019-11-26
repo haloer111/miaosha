@@ -44,6 +44,7 @@ public class RedisOperate {
 
     /**
      * 获取多个对象
+     *
      * @param prefix
      * @param key
      * @param clazz
@@ -141,6 +142,24 @@ public class RedisOperate {
             key = prefix.getPrefix() + key;
             jedis = jedisPool.getResource();
             return jedis.decr(key);
+        } finally {
+            returnResource(jedis);
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param prefix
+     * @param key    键
+     * @return
+     */
+    public boolean delete(KeyPrefix prefix, String key) {
+        Jedis jedis = null;
+        try {
+            key = prefix.getPrefix() + key;
+            jedis = jedisPool.getResource();
+            return jedis.del(key) > 0;
         } finally {
             returnResource(jedis);
         }

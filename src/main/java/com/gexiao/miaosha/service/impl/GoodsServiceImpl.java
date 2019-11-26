@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gexiao.miaosha.dao.GoodsMapper;
 import com.gexiao.miaosha.entity.Goods;
 import com.gexiao.miaosha.entity.vo.GoodsVo;
+import com.gexiao.miaosha.redis.RedisOperate;
+import com.gexiao.miaosha.redis.prefix.MiaoshaKey;
 import com.gexiao.miaosha.service.GoodsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -18,6 +21,8 @@ import java.util.Optional;
 @Service
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
 
+    @Autowired
+    private RedisOperate redisOperate;
 
     @Override
     public List<GoodsVo> listGoodsVo() {
@@ -27,7 +32,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Override
     public GoodsVo getGoodsVoByGoodsId(long goodsId) {
-        return Optional.ofNullable(baseMapper.getGoodsVoByGoodsId(goodsId)).orElse(new GoodsVo());
+        Integer stock = redisOperate.get(MiaoshaKey.getGoodsStock, String.valueOf(goodsId), Integer.class);
+        GoodsVo vo = new GoodsVo();
+        vo.setStockCount(stock);
+        vo.setId(goodsId);
+        return vo;
     }
 
 

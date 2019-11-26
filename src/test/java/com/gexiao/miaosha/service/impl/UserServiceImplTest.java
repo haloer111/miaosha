@@ -1,7 +1,15 @@
 package com.gexiao.miaosha.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.gexiao.miaosha.entity.MiaoshaGoods;
+import com.gexiao.miaosha.entity.MiaoshaOrder;
+import com.gexiao.miaosha.entity.OrderInfo;
 import com.gexiao.miaosha.entity.User;
-import com.gexiao.miaosha.service.UserService;
+import com.gexiao.miaosha.entity.core.BaseEntity;
+import com.gexiao.miaosha.entity.vo.GoodsVo;
+import com.gexiao.miaosha.redis.RedisOperate;
+import com.gexiao.miaosha.service.*;
 import com.gexiao.miaosha.util.MD5Utils;
 import com.gexiao.miaosha.util.UserUtils;
 import org.junit.Assert;
@@ -26,6 +34,18 @@ class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private MiaoshaService miaoshaService;
+    @Autowired
+    private RedisOperate redisOperate;
+    @Autowired
+    private MiaoshaOrderService miaoshaOrderService;
+
+    @Autowired
+    private MiaoshaGoodsService miaoshaGoodsService;
+
     @Test
     public void add() {
         User user = new User();
@@ -40,12 +60,10 @@ class UserServiceImplTest {
     }
 
 
-
-
     @Test
     @Transactional
     void mock() throws Exception {
-        int count = 1;
+        int count = 50;
 //        List<User> users = new ArrayList<User>(count);
 //        //生成用户
 //        for (int i = 0; i < count; i++) {
@@ -60,6 +78,34 @@ class UserServiceImplTest {
 //        userService.saveBatch(users);
         List<User> users = userService.list();
 
-        UserUtils.createUser(users,count);
+        UserUtils.createUser(users, count);
+    }
+
+    @Test
+    void reset() {
+
+        MiaoshaGoods miaoshaGoods = new MiaoshaGoods();
+        miaoshaGoods.setStockCount(50);
+
+        miaoshaGoodsService.update(miaoshaGoods,
+                new LambdaUpdateWrapper<MiaoshaGoods>()
+                        .isNotNull(BaseEntity::getCreateTime)
+        );
+
+        miaoshaOrderService.remove(new LambdaQueryWrapper<MiaoshaOrder>().isNotNull(BaseEntity::getCreateTime));
+        orderService.remove(new LambdaQueryWrapper<OrderInfo>().isNotNull(BaseEntity::getCreateTime));
+
+    }
+
+    @Test
+    void miaosha() {
+        for (int i = 50; i > 0; i--) {
+            GoodsVo goodsVo = new GoodsVo();
+            goodsVo.setStockCount(i);
+            goodsVo.setId(1l);
+
+            miaoshaService.miaosha(goodsVo);
+        }
+
     }
 }

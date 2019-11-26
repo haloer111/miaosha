@@ -45,7 +45,7 @@ public class UserUtils {
         RandomAccessFile raf = new RandomAccessFile(file, "rw");
         file.createNewFile();
         raf.seek(0);
-        for (int i = 0; i < users.size(); i++) {
+        for (int i = 0; i < count; i++) {
             User user = users.get(i);
             String urlString = "http://localhost:8080/login?id=" + user.getId() + "&password=123";
             URL url = new URL(urlString);

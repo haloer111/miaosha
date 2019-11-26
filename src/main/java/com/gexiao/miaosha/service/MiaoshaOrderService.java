@@ -9,5 +9,5 @@ import com.gexiao.miaosha.entity.MiaoshaOrder;
  */
 public interface MiaoshaOrderService extends IService<MiaoshaOrder> {
 
-
+    MiaoshaOrder getMiaoshaOrderByGoodsIdUserId(Long goodsId,Long userId);
 }
