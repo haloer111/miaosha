@@ -20,7 +20,7 @@
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <druid-spring-boot-starter.version>1.1.20</druid-spring-boot-starter.version>
         <jedis.version>3.1.0</jedis.version>
-        <fastjson.version>1.2.61</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <common-lang3.version>3.9</common-lang3.version>
     </properties>
 
